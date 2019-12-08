@@ -24,56 +24,72 @@
  */
 package net.runelite.client.rs;
 
+import java.io.FilterInputStream;
 import java.io.IOException;
-import java.util.ArrayDeque;
-import java.util.Collections;
-import java.util.List;
-import java.util.Queue;
-import java.util.Random;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import lombok.extern.slf4j.Slf4j;
-import net.runelite.http.api.RuneLiteAPI;
-import net.runelite.http.api.worlds.World;
-import net.runelite.http.api.worlds.WorldClient;
+import java.io.InputStream;
+import java.io.OutputStream;
+import lombok.Getter;
+import lombok.Setter;
 
-@Slf4j
-class HostSupplier implements Supplier<String>
+class TeeInputStream extends FilterInputStream
 {
-	private final Random random = new Random(System.nanoTime());
-	private Queue<String> hosts = new ArrayDeque<>();
+	@Getter
+	@Setter
+	private OutputStream out;
+
+	TeeInputStream(InputStream in)
+	{
+		super(in);
+	}
 
 	@Override
-	public String get()
+	public int read(byte[] b, int off, int len) throws IOException
 	{
-		if (!hosts.isEmpty())
+		int thisRead = super.read(b, off, len);
+
+		if (thisRead > 0)
 		{
-			return hosts.poll();
+			out.write(b, off, thisRead);
 		}
 
-		try
+		return thisRead;
+	}
+
+	@Override
+	public int read() throws IOException
+	{
+		int val = super.read();
+		if (val != -1)
 		{
-			List<String> newHosts = new WorldClient(RuneLiteAPI.CLIENT)
-				.lookupWorlds()
-				.getWorlds()
-				.stream()
-				.map(World::getAddress)
-				.collect(Collectors.toList());
-
-			Collections.shuffle(newHosts, random);
-
-			hosts.addAll(newHosts.subList(0, 16));
+			out.write(val);
 		}
-		catch (IOException e)
+		return val;
+	}
+
+	@Override
+	public long skip(long n) throws IOException
+	{
+		byte[] buf = new byte[(int) Math.min(n, 0x4000)];
+		long total = 0;
+		for (; n > 0; )
 		{
-			log.warn("Unable to retrieve world list", e);
-		}
+			int read = (int) Math.min(n, buf.length);
 
-		while (hosts.size() < 2)
-		{
-			hosts.add("oldschool" + (random.nextInt(50) + 1) + ".runescape.COM");
-		}
+			read = read(buf, 0, read);
+			if (read == -1)
+			{
+				break;
+			}
 
-		return hosts.poll();
+			total += read;
+			n -= read;
+		}
+		return total;
+	}
+
+	@Override
+	public boolean markSupported()
+	{
+		return false;
 	}
 }
