@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Abex
+ * Copyright (c) 2019 Abex
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,23 +22,20 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.plugins.wiki;
+package net.runelite.client.externalplugins;
 
+import java.net.URL;
+import java.net.URLClassLoader;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import net.runelite.api.SpriteID;
-import net.runelite.client.game.SpriteOverride;
 
-@RequiredArgsConstructor
-public enum WikiSprite implements SpriteOverride
+class ExternalPluginClassLoader extends URLClassLoader
 {
-	WIKI_ICON(-300, "wiki.png"),
-	WIKI_SELECTED_ICON(-301, "wiki_selected.png"),
-	FIXED_MODE_MINIMAP_CLICKMASK(SpriteID.MINIMAP_CLICK_MASK, "fixed_mode_minimap_clickmask.png");
-
 	@Getter
-	private final int spriteId;
+	private final ExternalPluginManifest manifest;
 
-	@Getter
-	private final String fileName;
+	ExternalPluginClassLoader(ExternalPluginManifest manifest, URL[] urls)
+	{
+		super(urls, ExternalPluginClassLoader.class.getClassLoader());
+		this.manifest = manifest;
+	}
 }

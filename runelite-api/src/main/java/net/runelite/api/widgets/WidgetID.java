@@ -147,6 +147,8 @@ public class WidgetID
 	public static final int EXPLORERS_RING_ALCH_GROUP_ID = 483;
 	public static final int OPTIONS_GROUP_ID = 261;
 	public static final int GWD_KC_GROUP_ID = 406;
+	public static final int LMS_GROUP_ID = 333;
+	public static final int LMS_INGAME_GROUP_ID = 328;
 
 	static class WorldMap
 	{
@@ -155,7 +157,7 @@ public class WidgetID
 		static final int SEARCH = 24;
 		static final int SURFACE_SELECTOR = 32;
 		static final int TOOLTIP = 38;
-		static final int OPTION = 43;
+		static final int OPTION = 46;
 	}
 
 	static class SlayerRewards
@@ -227,15 +229,15 @@ public class WidgetID
 	{
 		static final int BANK_CONTAINER = 1;
 		static final int INVENTORY_ITEM_CONTAINER = 3;
-		static final int BANK_TITLE_BAR = 4;
-		static final int CONTENT_CONTAINER = 10;
-		static final int TAB_CONTAINER = 11;
-		static final int ITEM_CONTAINER = 13;
-		static final int SEARCH_BUTTON_BACKGROUND = 40;
-		static final int DEPOSIT_INVENTORY = 42;
-		static final int DEPOSIT_EQUIPMENT = 44;
-		static final int INCINERATOR = 46;
-		static final int INCINERATOR_CONFIRM = 47;
+		static final int BANK_TITLE_BAR = 3;
+		static final int CONTENT_CONTAINER = 8;
+		static final int TAB_CONTAINER = 9;
+		static final int ITEM_CONTAINER = 11;
+		static final int SEARCH_BUTTON_BACKGROUND = 38;
+		static final int DEPOSIT_INVENTORY = 40;
+		static final int DEPOSIT_EQUIPMENT = 42;
+		static final int INCINERATOR = 44;
+		static final int INCINERATOR_CONFIRM = 45;
 	}
 
 	static class GrandExchange
@@ -279,17 +281,6 @@ public class WidgetID
 
 	static class Equipment
 	{
-		static final int HELMET = 6;
-		static final int CAPE = 7;
-		static final int AMULET = 8;
-		static final int WEAPON = 9;
-		static final int BODY = 10;
-		static final int SHIELD = 11;
-		static final int LEGS = 12;
-		static final int GLOVES = 13;
-		static final int BOOTS = 14;
-		static final int RING = 15;
-		static final int AMMO = 16;
 		static final int INVENTORY_ITEM_CONTAINER = 0;
 	}
 
@@ -317,6 +308,7 @@ public class WidgetID
 		static final int RUN_ORB_TEXT = 23;
 		static final int SPEC_ORB = 28;
 		static final int WORLDMAP_ORB = 41;
+		static final int WIKI_BANNER = 43;
 	}
 
 	static class LoginClickToPlayScreen
@@ -848,9 +840,9 @@ public class WidgetID
 
 	static class Options
 	{
-		static final int MUSIC_SLIDER = 44;
-		static final int SOUND_EFFECT_SLIDER = 50;
-		static final int AREA_SOUND_SLIDER = 56;
+		static final int MUSIC_SLIDER = 38;
+		static final int SOUND_EFFECT_SLIDER = 44;
+		static final int AREA_SOUND_SLIDER = 50;
 	}
 
 	static class AchievementDiary
@@ -861,5 +853,15 @@ public class WidgetID
 	static class Skills
 	{
 		static final int CONTAINER = 0;
+	}
+
+	static class Lms
+	{
+		static final int INFO = 2;
+	}
+
+	static class LmsKDA
+	{
+		static final int INFO = 4;
 	}
 }

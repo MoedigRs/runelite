@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Abex
+ * Copyright (c) 2020, Adam <Adam@sigterm.info>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,60 +22,60 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.rs;
+package net.runelite.http.api.npc;
 
-import java.io.FilterInputStream;
+import com.google.gson.JsonParseException;
+import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.function.IntConsumer;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.util.Map;
+import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
+import net.runelite.http.api.RuneLiteAPI;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
-class CountingInputStream extends FilterInputStream
+@Slf4j
+@Value
+public class NpcInfoClient
 {
-	private final IntConsumer changed;
+	private final OkHttpClient client;
 
-	CountingInputStream(InputStream in, IntConsumer changed)
+	public Map<Integer, NpcInfo> getNpcs() throws IOException
 	{
-		super(in);
-		this.changed = changed;
-	}
+		HttpUrl.Builder urlBuilder = RuneLiteAPI.getStaticBase().newBuilder()
+			.addPathSegment("npcs")
+			.addPathSegment("npcs.min.json");
 
-	private int read = 0;
+		HttpUrl url = urlBuilder.build();
 
-	@Override
-	public int read(byte[] b, int off, int len) throws IOException
-	{
-		int thisRead = super.read(b, off, len);
-		if (thisRead > 0)
+		log.debug("Built URI: {}", url);
+
+		Request request = new Request.Builder()
+			.url(url)
+			.build();
+
+		try (Response response = client.newCall(request).execute())
 		{
-			this.read += thisRead;
-		}
-		changed.accept(this.read);
-		return thisRead;
-	}
+			if (!response.isSuccessful())
+			{
+				log.warn("Error looking up npcs: {}", response);
+				return null;
+			}
 
-	@Override
-	public int read() throws IOException
-	{
-		int val = super.read();
-		if (val != -1)
+			InputStream in = response.body().byteStream();
+			final Type typeToken = new TypeToken<Map<Integer, NpcInfo>>()
+			{
+			}.getType();
+			return RuneLiteAPI.GSON.fromJson(new InputStreamReader(in), typeToken);
+		}
+		catch (JsonParseException ex)
 		{
-			this.read++;
+			throw new IOException(ex);
 		}
-		return val;
-	}
-
-	@Override
-	public long skip(long n) throws IOException
-	{
-		long thisRead = in.skip(n);
-		this.read += thisRead;
-		changed.accept(this.read);
-		return thisRead;
-	}
-
-	@Override
-	public boolean markSupported()
-	{
-		return false;
 	}
 }

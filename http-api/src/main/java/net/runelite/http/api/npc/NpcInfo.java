@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Adam <Adam@sigterm.info>
+ * Copyright (c) 2020, Adam <Adam@sigterm.info>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,17 +22,14 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.rs;
+package net.runelite.http.api.npc;
 
-public class VerificationException extends Exception
+import lombok.Data;
+
+@Data
+public class NpcInfo
 {
-	public VerificationException(String message)
-	{
-		super(message);
-	}
-
-	public VerificationException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+	private String name;
+	private int combat;
+	private int hitpoints;
 }

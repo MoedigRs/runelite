@@ -233,6 +233,16 @@ public interface MenuEntrySwapperConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "swapJewelleryBox",
+		name = "Jewellery Box",
+		description = "Swap Teleport Menu with previous destination on Jewellery Box"
+	)
+	default boolean swapJewelleryBox()
+	{
+		return false;
+	}
+
+	@ConfigItem(
 		keyName = "swapPrivate",
 		name = "Private",
 		description = "Swap Shared with Private on the Chambers of Xeric storage units."
@@ -348,6 +358,46 @@ public interface MenuEntrySwapperConfig extends Config
 		description = "Swap Leave Tomb with Quick-Leave at Pyramid Plunder"
 	)
 	default boolean swapQuickLeave()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "swapGEItemCollect",
+		name = "GE Item Collect",
+		description = "Swap Collect-notes, Collect-items, or Bank options from GE offer"
+	)
+	default GEItemCollectMode swapGEItemCollect()
+	{
+		return GEItemCollectMode.DEFAULT;
+	}
+
+	@ConfigItem(
+		keyName = "swapGEAbort",
+		name = "GE Abort",
+		description = "Swap abort offer on Grand Exchange offers when shift-clicking"
+	)
+	default boolean swapGEAbort()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "swapBankOp",
+		name = "Swap Bank Op",
+		description = "Swaps the extra menu option in banks (Wield, Eat, etc.) when holding shift"
+	)
+	default boolean swapBankOp()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "swapNpcContact",
+		name = "NPC Contact",
+		description = "Swap NPC Contact with last contacted NPC when shift-clicking"
+	)
+	default boolean swapNpcContact()
 	{
 		return false;
 	}
